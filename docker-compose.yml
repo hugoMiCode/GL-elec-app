@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: httpd:latest
+    ports:
+      - "9007:80"
+    volumes:
+      - ./frontend:/usr/local/apache2/htdocs
+
+  backend:
+    image: node:latest  # Utilise l'image Node.js directement
+    ports:
+      - "9008:3000"
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"  # Installe les dépendances avant de démarrer
