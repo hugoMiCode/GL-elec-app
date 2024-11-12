@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GL elec app</title>
+    <title>Drag and Drop Demo</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to the Electronics Tool</h1>
-    <p>Navigate through the sections:</p>
-
-    <div class="buttons">
-        <button onclick="navigateTo('simulation.html')">Simulation</button>
-        <button onclick="navigateTo('edit.html')">Edit Circuit</button>
+    <div class="container">
+        <div id="drop-zone" class="drop-zone">
+            <h2>Drop Zone</h2>
+        </div>
+        <div class="sidebar">
+            <h3>Drag Items</h3>
+            <div class="draggable" draggable="true" data-type="circle">Circle</div>
+            <div class="draggable" draggable="true" data-type="square">Square</div>
+            <div class="draggable" draggable="true" data-type="triangle">Triangle</div>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
