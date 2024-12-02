@@ -8,13 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     document.getElementById("fetchData").addEventListener("click", async () => {
-        const response = await fetch(`${backendUrl}/api/data`);
+        const response = await fetch(`${backendUrl}/data`);
         const data = await response.json();
         displayResponse(data);
     });
 
     document.getElementById("sendEcho").addEventListener("click", async () => {
-        const response = await fetch(`${backendUrl}/api/echo`, {
+        const response = await fetch(`${backendUrl}/echo`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("addNumbers").addEventListener("click", async () => {
-        const response = await fetch(`${backendUrl}/api/add`, {
+        const response = await fetch(`${backendUrl}/add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
