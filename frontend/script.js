@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const backendUrl = "http://nikolapp-backend:3000"; // Adresse du backend dans le réseau Docker
+
     const apiResponseDiv = document.getElementById("apiResponse");
 
     const displayResponse = (data) => {
@@ -6,13 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     document.getElementById("fetchData").addEventListener("click", async () => {
-        const response = await fetch("/api/data");
+        const response = await fetch(`${backendUrl}/api/data`);
         const data = await response.json();
         displayResponse(data);
     });
 
     document.getElementById("sendEcho").addEventListener("click", async () => {
-        const response = await fetch("/api/echo", {
+        const response = await fetch(`${backendUrl}/api/echo`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("addNumbers").addEventListener("click", async () => {
-        const response = await fetch("/api/add", {
+        const response = await fetch(`${backendUrl}/api/add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
