@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const backendUrl = "http://nikolapp-backend:3000"; // Adresse du backend dans le réseau Docker
+    const backendUrl = "/api"; // Adresse du backend dans le réseau Docker
 
     const apiResponseDiv = document.getElementById("apiResponse");
 
