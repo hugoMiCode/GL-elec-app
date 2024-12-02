@@ -9,10 +9,10 @@ services:
       - ./frontend:/usr/local/apache2/htdocs
 
   backend:
-    image: node:latest  # Utilise l'image Node.js directement
+    image: python:3.9
     ports:
       - "9008:3000"
     volumes:
       - ./backend:/app
     working_dir: /app
-    command: sh -c "npm install && npm run dev"  # Installe les dépendances avant de démarrer
+  command: sh -c "pip install -r requirements.txt && python app.py"

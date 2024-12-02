@@ -1,47 +1,37 @@
-const dropZone = document.getElementById('drop-zone');
-const draggables = document.querySelectorAll('.draggable');
+document.addEventListener("DOMContentLoaded", () => {
+    const apiResponseDiv = document.getElementById("apiResponse");
 
-// Prevent default behavior when dragging over the drop zone
-dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-});
+    const displayResponse = (data) => {
+        apiResponseDiv.textContent = JSON.stringify(data, null, 2);
+    };
 
-// Handle the drop event
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    
-    const type = e.dataTransfer.getData('text/plain');
-    const object = createObject(type);
-    
-    // Position the object at the drop location
-    const x = e.clientX - dropZone.offsetLeft;
-    const y = e.clientY - dropZone.offsetTop;
-    
-    object.style.left = `${x}px`;
-    object.style.top = `${y}px`;
-    
-    dropZone.appendChild(object);
-});
+    document.getElementById("fetchData").addEventListener("click", async () => {
+        const response = await fetch("/api/data");
+        const data = await response.json();
+        displayResponse(data);
+    });
 
-// Make the draggable items respond to dragstart
-draggables.forEach(draggable => {
-    draggable.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', e.target.getAttribute('data-type'));
+    document.getElementById("sendEcho").addEventListener("click", async () => {
+        const response = await fetch("/api/echo", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text: "Bonjour depuis le frontend !" })
+        });
+        const data = await response.json();
+        displayResponse(data);
+    });
+
+    document.getElementById("addNumbers").addEventListener("click", async () => {
+        const response = await fetch("/api/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ num1: 5, num2: 7 })
+        });
+        const data = await response.json();
+        displayResponse(data);
     });
 });
-
-// Create the object element based on its type
-function createObject(type) {
-    const object = document.createElement('div');
-    object.classList.add('object');
-    
-    if (type === 'circle') {
-        object.textContent = '⚫';
-    } else if (type === 'square') {
-        object.textContent = '■';
-    } else if (type === 'triangle') {
-        object.textContent = '▲';
-    }
-    
-    return object;
-}
