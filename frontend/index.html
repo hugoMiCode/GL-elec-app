@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag and Drop Demo</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Test de l'API - Nikolapp</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div id="drop-zone" class="drop-zone">
-            <h2>Drop Zone</h2>
-        </div>
-        <div class="sidebar">
-            <h3>Drag Items</h3>
-            <div class="draggable" draggable="true" data-type="circle">Circle</div>
-            <div class="draggable" draggable="true" data-type="square">Square</div>
-            <div class="draggable" draggable="true" data-type="triangle">Triangle</div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <header>
+        <h1>Test de l'API</h1>
+    </header>
+    <main>
+        <button id="fetchData">Récupérer des données</button>
+        <button id="sendEcho">Envoyer des données (Echo)</button>
+        <button id="addNumbers">Additionner des nombres</button>
+        <div id="apiResponse"></div>
+    </main>
 </body>
 </html>
