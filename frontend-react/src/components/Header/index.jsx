@@ -3,14 +3,14 @@ import { ThemeContext } from '../../utils/context/';
 
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import lightLogo from '../../assets/logo-light.png';
-import darkLogo from '../../assets/logo-dark.png';
+import lightLogo from '../../assets/logo_ENS1.png';
+import darkLogo from '../../assets/logo_ENS1.png';
 import colors from '../../utils/style/colors';
 
 const StyledImage = styled.img`
     object-fit: cover;
-    border-radius: 10%;
-    height: 50px;
+    border-radius: 5%;
+    height: 180px;
 `;
 
 const StyledLink = styled(Link)`
@@ -55,9 +55,9 @@ function Header() {
             <nav>
                 <ButtonWrapper>
                     <StyledLink to="/">Accueil</StyledLink>
-                    <StyledLink to="/freelances">Profils</StyledLink>
+                    {/*<StyledLink to="/freelances">Profils</StyledLink>*/}
                     <StyledLink to="/survey/1" $isFullLink>
-                        Faire le test
+                        Créer un circuit
                     </StyledLink>
                 </ButtonWrapper>
             </nav>

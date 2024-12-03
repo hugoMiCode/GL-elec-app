@@ -1,136 +1,139 @@
-import { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { useFetch } from '../../utils/hooks';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import colors from '../../utils/style/colors';
-import { Loader } from '../../utils/Loader';
-import { SurveyContext } from '../../utils/context';
+import { useState } from "react";
+import styled from "styled-components";
+import colors from "../../utils/style/colors";
 
-const SurveyContainer = styled.div`
+import item1 from "../../assets/Resistance.png";
+import item2 from "../../assets/Bobine.png";
+import item3 from "../../assets/Condensateur.png";
+
+const DragAndDropContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 20px;
 `;
 
-const QuestionTitle = styled.h2`
+const Header = styled.h2`
     text-decoration: underline;
     text-decoration-color: ${colors.primary};
 `;
 
-const QuestionContent = styled.span`
-    margin: 30px;
-`;
-
-const LinkWrapper = styled.div`
-    padding-top: 30px;
-    & a:first-of-type {
-        margin-right: 20px;
-    }
-`;
-
-const StyledLink = styled(Link)`
-    text-decoration: underline;
-    color: ${({ isDarkMode }) =>
-        isDarkMode ? colors.darkText : colors.lightText};
-    background-color: ${({ isDarkMode }) =>
-        isDarkMode ? colors.darkBackground : colors.lightBackground};
-    &:hover {
-        color: ${colors.primary};
-    }
-`;
-
-const ReplyBox = styled.button`
-    color: ${colors.text};
-    border: none;
-    height: 100px;
-    width: 300px;
+const Toolbox = styled.div`
     display: flex;
-    align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 10px;
     background-color: ${colors.backgroundLight};
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: ${(props) =>
-        props.isSelected ? `0px 0px 0px 2px ${colors.primary} inset` : 'none'};
-    &:first-child {
-        margin-right: 15px;
-    }
-    &:last-of-type {
-        margin-left: 15px;
-    }
+    border-radius: 10px;
+    box-shadow: 0 0 5px ${colors.primary};
+`;
+
+const ImageItem = styled.img`
+    width: 120px;
+    height: 60px;
+    margin: 10px;
+    cursor: grab;
+    user-select: none;
     &:hover {
-        color: ${colors.primary};
-        border: 1px solid ${colors.primary};
-        border-color: ${colors.primary};
+        box-shadow: 0 0 5px ${colors.primary};
+        transform: scale(1.1);
     }
 `;
 
-const ReplyWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
+const Workspace = styled.div`
+    position: relative;
+    border: 2px dashed ${colors.primary};
+    border-radius: 10px;
+    width: 80%;
+    height: 400px;
+    margin: 20px 0;
+    background-color: ${colors.backgroundLight};
 `;
 
-function Survey() {
-    const { questionNumber } = useParams();
-    const questionNumberInt = parseInt(questionNumber);
-    const prevQuestionNumber =
-        questionNumberInt === 1 ? 1 : questionNumberInt - 1;
-    const nextQuestionNumber = questionNumberInt + 1;
+const PlacedImage = styled.img`
+    width: 120px;
+    height: 60px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+`;
 
-    const { answers, saveAnswers } = useContext(SurveyContext);
-    function saveReply(answer) {
-        saveAnswers({ [questionNumber]: answer });
-        console.log(answers);
-    }
+function DragAndDrop() {
+    const [items] = useState([
+        { id: 1, src: item1 },
+        { id: 2, src: item2 },
+        { id: 3, src: item3 },
+    ]);
 
-    const { data, isLoading, error } = useFetch(`http://localhost:8000/survey`);
-    const surveyData = data?.surveyData || {};
+    const [placedItems, setPlacedItems] = useState([]);
+    const [draggingItem, setDraggingItem] = useState(null);
 
-    console.log(data);
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const workspaceBounds = e.target.getBoundingClientRect();
+        const x = e.clientX - workspaceBounds.left;
+        const y = e.clientY - workspaceBounds.top;
 
-    if (error) {
-        return <span>Il y a un problème</span>;
-    }
+        if (draggingItem) {
+            // Si on déplace un élément existant
+            setPlacedItems((prev) =>
+                prev.map((item) =>
+                    item.id === draggingItem.id ? { ...item, x, y } : item
+                )
+            );
+            setDraggingItem(null);
+        } else {
+            // Si on déplace un élément depuis la toolbox
+            const draggedItem = JSON.parse(e.dataTransfer.getData("text/plain"));
+            setPlacedItems((prev) => [
+                ...prev,
+                { id: Date.now(), src: draggedItem.src, x, y },
+            ]);
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDragStartFromToolbox = (e, item) => {
+        e.dataTransfer.setData("text/plain", JSON.stringify(item));
+    };
+
+    const handleDragStartPlacedItem = (item) => {
+        setDraggingItem(item);
+    };
 
     return (
-        <SurveyContainer>
-            <QuestionTitle>Question {questionNumber}</QuestionTitle>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <QuestionContent>
-                    {surveyData && surveyData[questionNumber]}
-                </QuestionContent>
-            )}
-            <ReplyWrapper>
-                <ReplyBox
-                    onClick={() => saveReply(true)}
-                    isSelected={answers[questionNumber] === true}
-                >
-                    Oui
-                </ReplyBox>
-                <ReplyBox
-                    onClick={() => saveReply(false)}
-                    isSelected={answers[questionNumber] === false}
-                >
-                    Non
-                </ReplyBox>
-            </ReplyWrapper>
-            <LinkWrapper>
-                <StyledLink to={`/survey/${prevQuestionNumber}`}>
-                    Précédent
-                </StyledLink>
-                {surveyData[questionNumberInt + 1] ? (
-                    <StyledLink to={`/survey/${nextQuestionNumber}`}>
-                        Suivant
-                    </StyledLink>
-                ) : (
-                    <StyledLink to="/results">Résultats</StyledLink>
-                )}
-            </LinkWrapper>
-        </SurveyContainer>
+        <DragAndDropContainer>
+            <Header>Créé ton circuit</Header>
+            <Toolbox>
+                {items.map((item) => (
+                    <ImageItem
+                        key={item.id}
+                        src={item.src}
+                        draggable
+                        onDragStart={(e) => handleDragStartFromToolbox(e, item)}
+                    />
+                ))}
+            </Toolbox>
+            <Workspace onDrop={handleDrop} onDragOver={handleDragOver}>
+                {placedItems.map((item) => (
+                    <PlacedImage
+                        key={item.id}
+                        src={item.src}
+                        style={{
+                            top: item.y,
+                            left: item.x,
+                        }}
+                        draggable
+                        onDragStart={() => handleDragStartPlacedItem(item)}
+                    />
+                ))}
+            </Workspace>
+        </DragAndDropContainer>
     );
 }
 
-export default Survey;
+export default DragAndDrop;

@@ -1,4 +1,4 @@
-import imageResume from '../../assets/resume.png';
+import imageNikola from '../../assets/NikolaTesla.png';
 import colors from '../../utils/style/colors.js';
 import styled from 'styled-components';
 
@@ -47,12 +47,11 @@ function App() {
         <HorizontalContainer>
             <VerticalContainer>
                 <StyledTitle>
-                    Repérez vos besoins, on s’occupe du reste, avec les
-                    meilleurs talents
+                    Projet Nikola
                 </StyledTitle>
-                <StyledButton>Faire le test</StyledButton>
+                <StyledButton>Créer un nouveau circuit</StyledButton>
             </VerticalContainer>
-            <StyledImage src={imageResume} alt="404" />
+            <StyledImage src={imageNikola} alt="404" />
         </HorizontalContainer>
     );
 }
