@@ -26,6 +26,18 @@ services:
       - nikolapp-network
       - reverse-proxy-network
 
+  react-app:
+    build:
+      context: ./frontend-react
+      dockerfile: Dockerfile
+    container_name: nikolapp-react-app
+    ports:
+      - "9010:80"
+    networks:
+      - nikolapp-network
+      - reverse-proxy-network
+    # depends_on:
+    #   - backend  # Assurez-vous que le backend est démarré avant l'application React
 
 networks:
   nikolapp-network:
