@@ -7,7 +7,7 @@ The solver is designed to produce transfer functions using Sympy for equation ma
 Classes:
     Component: Represents an electronic component in the circuit.
     Circuit: Represents the entire electronic circuit and provides methods to analyze and solve it.
-
+TODO : le résultat renvoyé est faux
 """
 
 import sympy
@@ -66,7 +66,7 @@ class Resistor(Component):
         Return the Voltage-Current equation for the resistor.
         """
         other_node = self.nodes[0] if self.nodes[1] == node else self.nodes[1]
-        return nodeVoltages[node] - nodeVoltages[other_node] / knownParameters[self.name]
+        return (nodeVoltages[node] - nodeVoltages[other_node]) / knownParameters[self.name]
     
 class VoltageSource(Component):
     """
@@ -200,7 +200,8 @@ class Solver:
                 expr = 0
                 for component in self.circuit.connections[node]:
                     expr += component.getEquation(node, self.nodeVoltages, self.unknownCurrents, self.knownParameters)
-                self.equations.append(sympy.Eq(expr, 0))
+                equation = sympy.Eq(expr, 0)
+                self.equations.append(equation) # TODO il manque un terme dans l'équation pour le noeud 2 de l'ex
 
         # Ajout des equations pour les composants spéciaux (sources de tension, courant, etc.)
         for component in self.circuit.components:
